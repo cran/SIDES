@@ -3,7 +3,7 @@
 \alias{print.SIDES_method}
 \title{SIDES algorithm}
 \description{
-\code{SIDES} apply Subgroup Identification based on Differential Effect Search algorithm on a data set for binary or continuous outcome.
+\code{SIDES} apply Subgroup Identification based on Differential Effect Search algorithm on a data set for binary, continuous or survival outcome.
 }
 \usage{
 SIDES_method(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, 
@@ -12,9 +12,9 @@ nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, M_per_covar=FALSE,
 upper_best=TRUE, selec=FALSE, seed=42)
 }
 \arguments{                
-  \item{all_set}{Matrix or data frame representing the global data set. The first column must be the outcome, the second column must be the treatment variable, and other columns are for covariates.}
+  \item{all_set}{Data frame representing the global data set. The first column must be the outcome (if the outcome is survival, this column should contain a data frame with the time-to-event in the first column and the indicator status in the second column), the second column must be the treatment variable, and other columns are for covariates.}
   \item{type_var}{A vector of length the number of covariates giving for each of them their type. Must be either "continuous", "ordinal" or "nominal".}
-  \item{type_outcome}{Type of outcome. For now are implementing "continuous" and "binary".}
+  \item{type_outcome}{Type of outcome. Are implementing "continuous", "binary", and "survival".}
   \item{level_control}{Value representing the control in the data set.}
   \item{D}{Minimum desired difference to be demonstrated between the treatment and the control.}
   \item{L}{Maximum number of covariates used to define a subgroup (= depth of the tree). The default value is set at 3.}

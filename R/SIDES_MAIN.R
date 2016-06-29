@@ -14,13 +14,141 @@
 #source(paste(chemin_prog,"TEST_STAT_PVAL.R",sep=""))
 #source(paste(chemin_prog,"FORMAT_BASE.R",sep=""))
 
-library(parallel)
+catch_entries_commun = function(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                 num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed){
+    if(ncol(all_set)<=2){
+        stop("Data base (all_set) does not contain any covariate.")
+    }
+    if(type_outcome != "binary" && type_outcome != "continuous" && type_outcome != "survival"){
+        stop("Outcome (type_outcome) should be either continuous, binary or survival.")
+    }
+    if(sum((type_var != "continuous") & (type_var != "ordinal") & (type_var != "nominal")) > 0){
+        stop("Covariate types (type_var) must be either continuous, ordinal, or nominal.")
+    }
+    if(as.integer(L) != L){
+        L = as.integer(L)
+        print(paste("The maximum number of covariates to define subgroups L was transformed into integer: L=", L, sep=""))
+    }
+    if(L < 1){
+        stop("The maximum number of covariates to define subgroups L must be superior or equal to 1.")
+    }
+    if(as.integer(M) != M){
+        M = as.integer(M)
+        print(paste("The maximum number of best promising subgroups M was transformed into integer: M=", M, sep=""))
+    }
+    if(M < 1){
+        stop("The maximum number of best promising subgroups M must be superior or equal to 1.")
+    }
+    if(length(gamma)==1 && is.na(gamma)){
+        print("Vector of relative improvment gamma was not supplied and will be chosen by cross-validation. This is time-consuming and not recommended.")
+    }
+    if(length(gamma) != L){
+        stop("Lenght of vector of relative improvment gamma should be equal to L.")
+    }
+    if(as.integer(H) != H){
+        H = as.integer(H)
+        print(paste("The number of sets H was transformed into integer: H=", H, sep=""))
+    }
+    if(H < 1){
+        stop("The number of sets H must be superior or equal to 1.")
+    }
+    if(pct_rand < 0 || pct_rand > 1){
+        stop("Percentage of sample size allocated randomly between sets (pct_rand) must be comprised between 0 and 1.")
+    }
+    if(length(prop_gpe) != H){
+        stop("Vector of proportions in each set (prop_gpe) must be equal to the number of sets H.")
+    }
+    if(sum(prop_gpe<0)>0 || sum(prop_gpe> 1)>0){
+        stop("Proportions of sample size in each set (prop_gpe) must be comprised between 0 and 1.")
+    }
+    if(alloc_high_prob != TRUE && alloc_high_prob != FALSE){
+        alloc_high_prob = TRUE
+        print("The allocation rule (alloc_high_prob) was misspecified and was thus reset to its default value.")
+    }
+    if(num_crit != 1 && num_crit != 2 && num_crit != 3){
+        num_crit = 1
+        print("The number associated to splitting criterion (num_crit) was misspecified and was thus reset to its default value.")
+    }
+    if(!is.na(gamma) && (step < 0 || step > 1)){
+        stop("step for cross-validation must be comprised between 0 and 1.")
+    }
+    if(!is.na(gamma) && as.integer(nb_sub_cross) != nb_sub_cross){
+        nb_sub_cross = as.integer(nb_sub_cross)
+        print(paste("The number of folds for cross-validation (nb_sub_cross) was transformed into integer: nb_sub_cross=", nb_sub_cross, sep=""))
+    }
+    if(nb_sub_cross < 2){
+        stop("The number of folds for cross-validation (nb_sub_cross) must be superior or equal to 2.")
+    }
+    if(alpha < 0 || alpha > 1){
+        stop("Type I error rate (alpha) must be comprised between 0 and 1.")
+    }
+    if(as.integer(nsim) != nsim){
+        nsim = as.integer(nsim)
+        print(paste("The number of permutations for resampling-based methods to adjust pvalues (nsim) was transformed into integer: nsim=", nsim, sep=""))
+    }
+    if(nsim < 1){
+        stop("The number of permutations for resampling-based methods to adjust pvalues (nsim) must be superior or equal to 1.")
+    }
+    if(!is.na(gamma) && as.integer(nsim_cv) != nsim_cv){
+        nsim_cv = as.integer(nsim_cv)
+        print(paste("The number of permutations for resampling-based methods to adjust pvalues in the cross-validation part (nsim_cv) was transformed into integer: nsim_cv=", nsim_cv, sep=""))
+    }
+    if(!is.na(gamma) && nsim_cv < 1){
+        stop("The number of permutations for resampling-based methods to adjust pvalues in the cross-validation part (nsim_cv) must be superior or equal to 1.")
+    }
+    if(as.integer(ord.bin) != ord.bin){
+        ord.bin = as.integer(ord.bin)
+        print(paste("The number of classes to discretize covariates (ord.bin) was transformed into integer: ord.bin=", ord.bin, sep=""))
+    }
+    if(ord.bin < 2){
+        stop("The number of classes to discretize covariates (ord.bin) must be superior or equal to 2.")
+    }
+    if(M_per_covar != TRUE && M_per_covar != FALSE){
+        M_per_covar = FALSE
+        print("The selection rule for best promising child subgroups (M_per_covar) was misspecified and was thus reset to its default value.")
+    }
+    if(upper_best != TRUE && upper_best != FALSE){
+        upper_best = TRUE
+        print("Boolean indicating if greater values of the outcome mean better responses (upper_best) was misspecified and was thus reset to its default value.")
+    }
+    if(as.integer(seed) != seed){
+        seed = as.integer(seed)
+        print(paste("The seed was transformed into integer: seed=", seed, sep=""))
+    }
+}
 
-  
+catch_entries1 = function(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                 num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, selec){
+    catch_entries_commun(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                         num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed)
+    if(selec != TRUE && selec != FALSE){
+        selec = FALSE
+        print("Boolean indicating if the function also print subgroups selected and not necessarily validated (selec) was misspecified and was thus reset to its default value.")
+    }
+}
+
+catch_entries2 = function(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                 num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, nrep){
+    catch_entries_commun(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                         num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed)
+    if(as.integer(nrep) != nrep){
+        nrep = as.integer(nrep)
+        print(paste("The number of simulations (nrep) was transformed into integer: nrep=", nrep, sep=""))
+    }
+    if(nrep < 1){
+        stop("The number of simulations (nrep) must be superior or equal to 1.")
+    }
+}
+
+
 #### SIDES algorithm
 SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, gamma=NA, H=3, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, 
                  num_crit, step=0.5, nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, M_per_covar=FALSE, 
-                 upper_best=TRUE, selec=FALSE, seed=42){            
+                 upper_best=TRUE, selec=FALSE, seed=42){  
+                 
+    catch_entries1(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                 num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, selec)    
+                        
     X_covariate = all_set[,-1]
     # Balanced allocation procedure
     alloc_btw_sets = allocation_procedure(H, pct_rand, X_covariate, type_var, prop_gpe, alloc_high_prob, FALSE, seed)
@@ -36,11 +164,12 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
             gamma = as.numeric(gamma[1,])
         }
     }
-
+    
     # Candidates subgroups
     res_candidates = subgroup_identification_candidates(training_set, type_var, type_outcome, level_control, D, L, S, num_crit, M, gamma, alpha, nsim, ord.bin, upper_best, M_per_covar, seed)
     candidates = res_candidates[[1]]
     nb_candidates = length(candidates)  
+
     if(nb_candidates==0){
         print("No subgroup identified")
         res = list("candidates"=list(list(),c()), "confirmed"=list(list(),c()))
@@ -105,7 +234,6 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
     }
     res = c(res,"base"=list(all_set),"training"=list(training_set))
     class(res) = "SIDES_method"
-    print.SIDES_method(res)
     return(res)
 }
 
@@ -115,13 +243,11 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
                             alpha, nsim=500, ord.bin=10, nrep=100, seed=42, 
                             H=2, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, 
                             step=0.5, nb_sub_cross=5, nsim_cv=500,
-                            M_per_covar=FALSE, upper_best=TRUE, nb_cores=NA, ideal=NA){
-    if(is.na(nb_cores)){
-        nb_cores = detectCores()
-    }       
-    cl = makeCluster(nb_cores, outfile="")
-    registerDoParallel(cl)
+                            M_per_covar=FALSE, upper_best=TRUE, ideal=NA){
 
+    catch_entries2(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                 num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, nrep)
+                 
     list_selected = list()
     list_top = list()
     pct_selected = c()
@@ -136,12 +262,13 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
     mean_size = 0
 
     #Simulate nrep replications of analysis
-    res_simu = foreach(r=1:nrep, .export=ls(globalenv()), .inorder=FALSE) %dopar% {
+    res_simu = list()
+    for(r in 1:nrep){
         set.seed(1907+r)
 print(r)
         res_r = SIDES_method(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                    num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r)    
-        return(res_r)
+        res_simu = c(res_simu, list(res_r))
     }
   
     #Format results
@@ -161,7 +288,7 @@ print(r)
             find_sous_ens1 = FALSE
             find_sous_cov2 = FALSE
             find_sous_ens2 = FALSE
-            
+           
             if(length(list_selected)==0){
                 list_selected = c(list_selected, select_cur)
                 pct_selected = c(pct_selected, rep(1, length(select_cur)))
@@ -250,7 +377,6 @@ print(r)
     pct_sous_ens_top1 = pct_sous_ens_top1/nrep*100
     pct_sous_cov_select2 = pct_sous_cov_select2/nrep*100
     pct_sous_ens_top2 = pct_sous_ens_top2/nrep*100
-    stopCluster(cl)
     
     res = list( "pct_no_subgroup"=pct_no_subgroup, "mean_size"=mean_size,
     "pct_ideal_selected"=pct_ideal_selected, "pct_ideal_top"=pct_ideal_top,
@@ -260,7 +386,6 @@ print(r)
     "ideal"=ideal )  
     res = c(res,"base"=list(all_set))
     class(res) = "simulation_SIDES"
-    print.simulation_SIDES(res)
     return(res)
 }
 
@@ -414,7 +539,7 @@ print.simulation_SIDES = function(x, ...){
     others = FALSE
     cat("No subgroup selected in ", x$pct_no_subgroup, "% \n")
     cat("Average size of the confirmed subgroups in the training data set in ", x$mean_size, "\n")
-    if(is.na(x$ideal)==FALSE){      
+    if(length(x$ideal) > 1 || (length(x$ideal) == 1 && is.na(x$ideal)==FALSE)){      
         cat("Percentage of simulations where the ideal subgroup is confirmed: ", x$pct_ideal_selected, "% \n")
         cat("Percentage of simulations where the ideal subgroup is the top confirmed subgroup: ", x$pct_ideal_top, "% \n")
         cat("Percentage of simulations where a subgroup containing a subset of the covariates used to define the ideal subgroup is selected (including the ideal): ", x$pct_sous_cov_select1, "% \n")

@@ -2,7 +2,6 @@
 # RESAMPLING METHOD SIGNIFICANCE LEVEL #
 ########################################
 
-library(doParallel)
 
 #### Estimate the adjusted significance level for selection criterion
 adjusted_pval_level = function(training_set, promising, nsim, type_var, type_outcome, level_control, D, L=3, S, num_crit, 

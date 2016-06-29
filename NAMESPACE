@@ -1,12 +1,8 @@
 importFrom("nnet", "which.is.max")
 importFrom("multicool", "multinom")
-import(doParallel)
 import(memoise)
-import(foreach)
-import(parallel)
 importFrom("stats", "fisher.test", "pnorm", "pt", "qnorm", "quantile", "var")
 importFrom("utils", "combn")
 export(simulation_SIDES)
-
 
 
