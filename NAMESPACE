@@ -3,6 +3,11 @@ importFrom("multicool", "multinom")
 import(memoise)
 importFrom("stats", "fisher.test", "pnorm", "pt", "qnorm", "quantile", "var")
 importFrom("utils", "combn")
+export(SIDES_method)
+S3method(print, SIDES_method)
 export(simulation_SIDES)
+S3method(print, simulation_SIDES)
+
+
 
 
