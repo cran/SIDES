@@ -60,8 +60,6 @@ nb_sub_cross=5, nsim_cv, ord.bin=10,upper_best=TRUE, M_per_covar=FALSE, seed=42)
             }
         }
         signif_level[g] =  pval_g/nb_sub_cross 
-print("signif_level[g]")   
-print(signif_level[g])  
     }
 
     # Optimal gamma

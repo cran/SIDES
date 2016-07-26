@@ -133,9 +133,11 @@ L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
                      pval_promising = c(pval_promising, pvalues_childs[i])
                  }
             }
-            # Add the current promisings subgroups to the final promisings
-            promisings <<- c(promisings, promising_cur)
-            pvalues_promisings <<- c(pvalues_promisings, pval_promising)
+            if(length(pval_promising) > 0){
+                # Add the current promisings subgroups to the final promisings
+                promisings <<- c(promisings, promising_cur)
+                pvalues_promisings <<- c(pvalues_promisings, pval_promising)
+            }
             best_pval <<- min(best_pval, pvalues_childs)
 
             # For each promising child call the function recursively
@@ -274,11 +276,12 @@ L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
                         pval_promising = c(pval_promising, pvalues_childs[i])
                     }
                 }
-                # Add the current promisings subgroups to the final promisings
-                promisings <<- c(promisings, promising_cur)
-                pvalues_promisings <<- c(pvalues_promisings, pval_promising)
+                if(length(pval_promising) > 0){
+                    # Add the current promisings subgroups to the final promisings
+                    promisings <<- c(promisings, promising_cur)
+                    pvalues_promisings <<- c(pvalues_promisings, pval_promising)
+                }
                 best_pval <<- min(best_pval, pvalues_childs)
-
                 # For each promising child call the function recursively
                 for(child in promising_cur) {
                     rec_search(child)
@@ -317,15 +320,16 @@ D=0, L=3, S, num_crit, M=5, gamma, alpha, nsim, ord.bin, upper_best=TRUE, M_per_
     pvalues_promising = res_prom[[2]]
     nb_prom = length(pvalues_promising)
 
-    # Adjusted pvalue for significance level for selection criterion
-    adjusted_pval_level = adjusted_pval_level(training_set, res_prom, nsim, type_var, type_outcome, level_control, D, L, S, num_crit, M, gamma, alpha, ord.bin, upper_best, M_per_covar, seed)
-
-    # Selection criterion
-    for(i in 1:nb_prom){
-        if(adjusted_pval_level[i] < alpha){
-            candidates = c(candidates, list(promising_subgroups[[i]]))
-            pvalues_candidates = c(pvalues_candidates, pvalues_promising[i])
-            adj_pvalues_candidates = c(adj_pvalues_candidates, adjusted_pval_level[i])
+    if(nb_prom > 1){
+        # Adjusted pvalue for significance level for selection criterion
+        adjusted_pval_level = adjusted_pval_level(training_set, res_prom, nsim, type_var, type_outcome, level_control, D, L, S, num_crit, M, gamma, alpha, ord.bin, upper_best, M_per_covar, seed)
+        # Selection criterion
+        for(i in 1:nb_prom){
+            if(adjusted_pval_level[i] < alpha){
+                candidates = c(candidates, list(promising_subgroups[[i]]))
+                pvalues_candidates = c(pvalues_candidates, pvalues_promising[i])
+                adj_pvalues_candidates = c(adj_pvalues_candidates, adjusted_pval_level[i])
+            }
         }
     }
     return(list(candidates, pvalues_candidates, adj_pvalues_candidates))
