@@ -88,6 +88,11 @@ analyse = function(set_groupe, type_outcome, level_control, D=0, alpha, upper_be
             }
             eff_met = (pval_eff<alpha)
         }
+        if(type_outcome=="survival"){
+            zeff = summary(coxph(Surv(outcome[,1], outcome[,2]) ~ treatment))$coef[4]
+            pval_eff = pnorm(zeff,0,1)
+            eff_met = (pval_eff<alpha)
+        }
     }
     else{
         zeff = 0

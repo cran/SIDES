@@ -244,9 +244,11 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
                             H=2, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, 
                             step=0.5, nb_sub_cross=5, nsim_cv=500,
                             M_per_covar=FALSE, upper_best=TRUE, ideal=NA){
-
     catch_entries2(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, nrep)
+    if(H==1){
+        n_rep = 1
+    }
                  
     list_selected = list()
     list_top = list()
