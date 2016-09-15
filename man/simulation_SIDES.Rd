@@ -9,7 +9,7 @@
 simulation_SIDES(all_set, type_var, type_outcome, level_control, D=0, L=3, S, 
 M=5, num_crit=1, gamma=NA, alpha, nsim=500, ord.bin=10, nrep=100, seed=42,
 H=2, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, step=0.5, nb_sub_cross=5, 
-nsim_cv=500, M_per_covar=FALSE, upper_best=TRUE, ideal=NA)
+nsim_cv=500, M_per_covar=FALSE, upper_best=TRUE, nb_cores=NA, ideal=NA)
 }
 \arguments{                
   \item{all_set}{Data frame representing the global data set. The first column must be the outcome (if the outcome is survival, this column should contain a data frame with the time-to-event in the first column and the indicator status in the second column), the second column must be the treatment variable, and other columns are for covariates.}
@@ -36,6 +36,7 @@ nsim_cv=500, M_per_covar=FALSE, upper_best=TRUE, ideal=NA)
   \item{nsim_cv}{Number of permutations for the resampling-based method used to protect the overall Type I error rate in the cross-validation part to determine \code{gamma}. The default value is set at 500.}
   \item{M_per_covar}{Boolean indicating if the \code{M} best promising child subgroups are selected by covariate (TRUE) or across all remaining covariates. The default value is set at FALSE.}
   \item{upper_best}{Boolean indicating if greater values of the outcome mean better responses.}
+  \item{nb_cores}{Number of cores to use as algorithm is parallelized. The default value used all available cores minus 1.}
   \item{ideal}{When a simulation study is set up and data are generated, the ideal subgroup can be provided to obtain additional results. See examples for more details.}
 }
 \value{
@@ -66,7 +67,7 @@ head(data)
 s1 = simulation_SIDES(all_set=data[,c(1,2,8,9,10)], type_var=rep("ordinal",3), 
 type_outcome="continuous", level_control=0, D=0, L=1, S=50, M=1, num_crit=1, 
 gamma=c(1), alpha=0.05, nsim=1, ord.bin=10, nrep=1, seed=42,
-H=2, pct_rand=1.0, prop_gpe=c(0.7,0.3), upper_best=TRUE)
+H=2, pct_rand=1.0, prop_gpe=c(0.7,0.3), upper_best=TRUE, nb_cores=1)
 
 # REAL EXAMPLE TO UNCOMMENT
 #s1 = simulation_SIDES(all_set=data, type_var=rep("ordinal",10), 

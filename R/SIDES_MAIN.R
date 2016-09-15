@@ -1,18 +1,6 @@
 ###################
 # SIDES ALGORITHM #
 ###################
-#chemin_prog = "E:/Sujets_Methodo/SUBGROUP IDENTIFICATION/SIDES/CODE/MON CODE R/Method_paper/Package R/SIDES/R/"
-#setwd(chemin_prog)
-#source(paste(chemin_prog,"ADJUSTED_PVALUES.R",sep=""))
-#source(paste(chemin_prog,"ALLOCATION.R",sep=""))
-#source(paste(chemin_prog,"COMBINATION_TWO_CHILD.R",sep=""))
-#source(paste(chemin_prog,"CONTINUATION_CRITERIA.R",sep=""))
-#source(paste(chemin_prog,"CROSS_VALIDATION.R",sep=""))
-#source(paste(chemin_prog,"IDENTIFICATION.R",sep=""))
-#source(paste(chemin_prog,"RESAMPLING_METHOD.R",sep=""))
-#source(paste(chemin_prog,"SPLITTING_CRITERIA.R",sep=""))
-#source(paste(chemin_prog,"TEST_STAT_PVAL.R",sep=""))
-#source(paste(chemin_prog,"FORMAT_BASE.R",sep=""))
 
 catch_entries_commun = function(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed){
@@ -243,9 +231,16 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
                             alpha, nsim=500, ord.bin=10, nrep=100, seed=42, 
                             H=2, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, 
                             step=0.5, nb_sub_cross=5, nsim_cv=500,
-                            M_per_covar=FALSE, upper_best=TRUE, ideal=NA){
+                            M_per_covar=FALSE, upper_best=TRUE, nb_cores=NA, ideal=NA){
     catch_entries2(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, nrep)
+  
+    if(is.na(nb_cores)){
+        nb_cores = detectCores()-1
+    }       
+    cl = makeCluster(nb_cores, outfile="")
+    registerDoParallel(cl)
+  
     if(H==1){
         n_rep = 1
     }
@@ -264,13 +259,12 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
     mean_size = 0
 
     #Simulate nrep replications of analysis
-    res_simu = list()
-    for(r in 1:nrep){
+    res_simu = foreach(r=1:nrep, .export=ls(globalenv()), .inorder=FALSE) %dopar% {
         set.seed(1907+r)
 print(r)
         res_r = SIDES_method(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                    num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r)    
-        res_simu = c(res_simu, list(res_r))
+        return(res_r)
     }
   
     #Format results
@@ -379,6 +373,7 @@ print(r)
     pct_sous_ens_top1 = pct_sous_ens_top1/nrep*100
     pct_sous_cov_select2 = pct_sous_cov_select2/nrep*100
     pct_sous_ens_top2 = pct_sous_ens_top2/nrep*100
+    stopCluster(cl)
     
     res = list( "pct_no_subgroup"=pct_no_subgroup, "mean_size"=mean_size,
     "pct_ideal_selected"=pct_ideal_selected, "pct_ideal_top"=pct_ideal_top,
