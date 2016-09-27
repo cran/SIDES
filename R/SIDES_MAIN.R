@@ -57,10 +57,10 @@ catch_entries_commun = function(all_set, type_var, type_outcome, level_control, 
         num_crit = 1
         print("The number associated to splitting criterion (num_crit) was misspecified and was thus reset to its default value.")
     }
-    if(!is.na(gamma) && (step < 0 || step > 1)){
+    if(is.na(gamma) && (step < 0 || step > 1)){
         stop("step for cross-validation must be comprised between 0 and 1.")
     }
-    if(!is.na(gamma) && as.integer(nb_sub_cross) != nb_sub_cross){
+    if(is.na(gamma) && as.integer(nb_sub_cross) != nb_sub_cross){
         nb_sub_cross = as.integer(nb_sub_cross)
         print(paste("The number of folds for cross-validation (nb_sub_cross) was transformed into integer: nb_sub_cross=", nb_sub_cross, sep=""))
     }
