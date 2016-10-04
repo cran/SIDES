@@ -48,6 +48,9 @@ sub_sets_all_childs = function(set, parents, covariate, list_two_child, type_cov
 
 #### Function that return treatment T-stat and p_value from a given data set
 analyse = function(set_groupe, type_outcome, level_control, D=0, alpha, upper_best=TRUE){
+    if(is.null(dim(set_groupe))){
+        set_groupe = t(as.matrix(set_groupe))
+    }
     outcome = set_groupe[,1]
     treatment = set_groupe[,2]
     level_trt = unique(treatment)

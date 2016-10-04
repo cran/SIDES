@@ -103,22 +103,72 @@ catch_entries_commun = function(all_set, type_var, type_outcome, level_control, 
         seed = as.integer(seed)
         print(paste("The seed was transformed into integer: seed=", seed, sep=""))
     }
+    return(list(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+           num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed))
 }
 
 catch_entries1 = function(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, selec){
-    catch_entries_commun(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+    catch = catch_entries_commun(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                          num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed)
+    all_set = catch[[1]]
+    type_var = catch[[2]]
+    type_outcome = catch[[3]]
+    level_control = catch[[4]]
+    D = catch[[5]]
+    L = catch[[6]]
+    S = catch[[7]]
+    M = catch[[8]]
+    gamma = catch[[9]]
+    H = catch[[10]]
+    pct_rand = catch[[11]]
+    prop_gpe = catch[[12]]
+    alloc_high_prob = catch[[13]]
+    num_crit = catch[[14]]
+    step = catch[[15]]
+    nb_sub_cross = catch[[16]]
+    alpha = catch[[17]]
+    nsim = catch[[18]]
+    nsim_cv = catch[[19]]
+    ord.bin = catch[[20]]
+    M_per_covar = catch[[21]]
+    upper_best = catch[[22]]
+    seed = catch[[23]]
     if(selec != TRUE && selec != FALSE){
         selec = FALSE
         print("Boolean indicating if the function also print subgroups selected and not necessarily validated (selec) was misspecified and was thus reset to its default value.")
     }
+    return(list(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+         num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, selec))
 }
 
 catch_entries2 = function(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, nrep){
-    catch_entries_commun(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+    catch = catch_entries_commun(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                          num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed)
+    all_set = catch[[1]]
+    type_var = catch[[2]]
+    type_outcome = catch[[3]]
+    level_control = catch[[4]]
+    D = catch[[5]]
+    L = catch[[6]]
+    S = catch[[7]]
+    M = catch[[8]]
+    gamma = catch[[9]]
+    H = catch[[10]]
+    pct_rand = catch[[11]]
+    prop_gpe = catch[[12]]
+    alloc_high_prob = catch[[13]]
+    num_crit = catch[[14]]
+    step = catch[[15]]
+    nb_sub_cross = catch[[16]]
+    alpha = catch[[17]]
+    nsim = catch[[18]]
+    nsim_cv = catch[[19]]
+    ord.bin = catch[[20]]
+    M_per_covar = catch[[21]]
+    upper_best = catch[[22]]
+    seed = catch[[23]]
     if(as.integer(nrep) != nrep){
         nrep = as.integer(nrep)
         print(paste("The number of simulations (nrep) was transformed into integer: nrep=", nrep, sep=""))
@@ -126,6 +176,8 @@ catch_entries2 = function(all_set, type_var, type_outcome, level_control, D, L, 
     if(nrep < 1){
         stop("The number of simulations (nrep) must be superior or equal to 1.")
     }
+    return(list(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, nrep))
 }
 
 
@@ -134,9 +186,32 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
                  num_crit, step=0.5, nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, M_per_covar=FALSE, 
                  upper_best=TRUE, selec=FALSE, seed=42){  
                  
-    catch_entries1(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+    catch = catch_entries1(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, selec)    
-                        
+    all_set = catch[[1]]
+    type_var = catch[[2]]
+    type_outcome = catch[[3]]
+    level_control = catch[[4]]
+    D = catch[[5]]
+    L = catch[[6]]
+    S = catch[[7]]
+    M = catch[[8]]
+    gamma = catch[[9]]
+    H = catch[[10]]
+    pct_rand = catch[[11]]
+    prop_gpe = catch[[12]]
+    alloc_high_prob = catch[[13]]
+    num_crit = catch[[14]]
+    step = catch[[15]]
+    nb_sub_cross = catch[[16]]
+    alpha = catch[[17]]
+    nsim = catch[[18]]
+    nsim_cv = catch[[19]]
+    ord.bin = catch[[20]]
+    M_per_covar = catch[[21]]
+    upper_best = catch[[22]]
+    seed = catch[[23]]
+    selec = catch[[24]]
     X_covariate = all_set[,-1]
     # Balanced allocation procedure
     alloc_btw_sets = allocation_procedure(H, pct_rand, X_covariate, type_var, prop_gpe, alloc_high_prob, FALSE, seed)
@@ -152,12 +227,10 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
             gamma = as.numeric(gamma[1,])
         }
     }
-    
     # Candidates subgroups
     res_candidates = subgroup_identification_candidates(training_set, type_var, type_outcome, level_control, D, L, S, num_crit, M, gamma, alpha, nsim, ord.bin, upper_best, M_per_covar, seed)
     candidates = res_candidates[[1]]
     nb_candidates = length(candidates)  
-
     if(nb_candidates==0){
         print("No subgroup identified")
         res = list("candidates"=list(list(),c()), "confirmed"=list(list(),c()))
@@ -232,14 +305,40 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
                             H=2, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, 
                             step=0.5, nb_sub_cross=5, nsim_cv=500,
                             M_per_covar=FALSE, upper_best=TRUE, nb_cores=NA, ideal=NA){
-    catch_entries2(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+    catch = catch_entries2(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, nrep)
   
+    all_set = catch[[1]]
+    type_var = catch[[2]]
+    type_outcome = catch[[3]]
+    level_control = catch[[4]]
+    D = catch[[5]]
+    L = catch[[6]]
+    S = catch[[7]]
+    M = catch[[8]]
+    gamma = catch[[9]]
+    H = catch[[10]]
+    pct_rand = catch[[11]]
+    prop_gpe = catch[[12]]
+    alloc_high_prob = catch[[13]]
+    num_crit = catch[[14]]
+    step = catch[[15]]
+    nb_sub_cross = catch[[16]]
+    alpha = catch[[17]]
+    nsim = catch[[18]]
+    nsim_cv = catch[[19]]
+    ord.bin = catch[[20]]
+    M_per_covar = catch[[21]]
+    upper_best = catch[[22]]
+    seed = catch[[23]]
+    nrep = catch[[24]]  
     if(is.na(nb_cores)){
         nb_cores = detectCores()-1
-    }       
-    cl = makeCluster(nb_cores, outfile="")
-    registerDoParallel(cl)
+    }   
+    if(nb_cores>1){
+        cl = makeCluster(nb_cores, outfile="")
+        registerDoParallel(cl)
+    }
   
     if(H==1){
         n_rep = 1
@@ -259,14 +358,25 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
     mean_size = 0
 
     #Simulate nrep replications of analysis
-    res_simu = foreach(r=1:nrep, .export=ls(globalenv()), .inorder=FALSE) %dopar% {
-        set.seed(1907+r)
+    if(nb_cores>1){
+      res_simu = foreach(r=1:nrep, .export=ls(globalenv()), .inorder=FALSE) %dopar% {
+          set.seed(seed+r)
+print(r)
+          res_r = SIDES_method(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                   num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r)    
+          return(res_r)
+      }
+    }
+    else{
+      res_simu = list()
+      for(r in 1:nrep){
+        set.seed(seed+r)
 print(r)
         res_r = SIDES_method(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
-                   num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r)    
-        return(res_r)
+                             num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r)    
+        res_simu = c(res_simu, list(res_r))
+      }
     }
-  
     #Format results
     for(r in 1:nrep){
         res_r = res_simu[[r]]
@@ -373,7 +483,9 @@ print(r)
     pct_sous_ens_top1 = pct_sous_ens_top1/nrep*100
     pct_sous_cov_select2 = pct_sous_cov_select2/nrep*100
     pct_sous_ens_top2 = pct_sous_ens_top2/nrep*100
-    stopCluster(cl)
+    if(nb_cores>1){
+        stopCluster(cl)
+    }
     
     res = list( "pct_no_subgroup"=pct_no_subgroup, "mean_size"=mean_size,
     "pct_ideal_selected"=pct_ideal_selected, "pct_ideal_top"=pct_ideal_top,

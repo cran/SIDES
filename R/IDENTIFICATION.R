@@ -44,11 +44,11 @@ L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
                 analyse_temp = analyse(set_all_childs[[split]][[1]], type_outcome, level_control, D, alpha, upper_best)
           	    pvalues[[split]] = c(pvalues[[split]], analyse_temp[2])
                 z_stats_eff[[split]] = c(z_stats_eff[[split]], analyse_temp[1])
-                sizes[[split]] = c(sizes[[split]], nrow(set_all_childs[[split]][[1]]))
+                sizes[[split]] = c(sizes[[split]], ifelse(is.null(nrow(set_all_childs[[split]][[1]])), 1, nrow(set_all_childs[[split]][[1]])))
                 analyse_temp = analyse(set_all_childs[[split]][[2]], type_outcome, level_control, D, alpha, upper_best)
                 pvalues[[split]] = c(pvalues[[split]], analyse_temp[2])
                 z_stats_eff[[split]] = c(z_stats_eff[[split]], analyse_temp[1])
-                sizes[[split]] = c(sizes[[split]], nrow(set_all_childs[[split]][[2]]))
+                sizes[[split]] = c(sizes[[split]], ifelse(is.null(nrow(set_all_childs[[split]][[2]])), 1, nrow(set_all_childs[[split]][[2]])))
       	    }
 
       	    # If the best of the two child have a sample size < S, split is eliminated
@@ -203,11 +203,11 @@ L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
                 analyse_temp = analyse(set_all_childs[[split]][[1]], type_outcome, level_control, D, alpha, upper_best)
           	    pvalues[[split]] = c(pvalues[[split]], analyse_temp[2])
                 z_stats_eff[[split]] = c(z_stats_eff[[split]], analyse_temp[1])
-                sizes[[split]] = c(sizes[[split]], nrow(set_all_childs[[split]][[1]]))
+                sizes[[split]] = c(sizes[[split]], ifelse(is.null(nrow(set_all_childs[[split]][[1]])), 1, nrow(set_all_childs[[split]][[1]])))
                 analyse_temp = analyse(set_all_childs[[split]][[2]], type_outcome, level_control, D, alpha, upper_best)
                 pvalues[[split]] = c(pvalues[[split]], analyse_temp[2])
                 z_stats_eff[[split]] = c(z_stats_eff[[split]], analyse_temp[1])
-                sizes[[split]] = c(sizes[[split]], nrow(set_all_childs[[split]][[2]]))
+                sizes[[split]] = c(sizes[[split]], ifelse(is.null(nrow(set_all_childs[[split]][[2]])), 1, nrow(set_all_childs[[split]][[2]])))
       	    }
 
       	    # If the best of the two child have a sample size < S, split is eliminated
