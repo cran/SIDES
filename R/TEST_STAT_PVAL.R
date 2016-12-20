@@ -74,7 +74,7 @@ analyse = function(set_groupe, type_outcome, level_control, D=0, alpha, upper_be
             pval_eff = 1-pt(zeff,n1+n2-2)
             eff_met = (pval_eff<alpha)
         }
-        if(type_outcome=="binary"){
+        else if(type_outcome=="binary"){
             prop1 = mean(outcome_trt1)
             prop2 = mean(outcome_trt2)
             if(prop1*n1 > 5 && prop2*n2 > 5 && (1-prop1)*n1 > 5 && (1-prop2)*n2 > 5){
@@ -91,9 +91,14 @@ analyse = function(set_groupe, type_outcome, level_control, D=0, alpha, upper_be
             }
             eff_met = (pval_eff<alpha)
         }
-        if(type_outcome=="survival"){
+        else if(type_outcome=="survival"){
             zeff = summary(coxph(Surv(outcome[,1], outcome[,2]) ~ treatment))$coef[4]
             pval_eff = pnorm(zeff,0,1)
+            eff_met = (pval_eff<alpha)
+        }
+        else if(type_outcome=="count"){
+            zeff = summary(glm.nb(outcome ~ treatment))$coef[6]
+            pval_eff = 1-pnorm(zeff,0,1)
             eff_met = (pval_eff<alpha)
         }
     }

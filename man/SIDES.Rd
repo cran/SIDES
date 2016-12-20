@@ -3,25 +3,25 @@
 \alias{print.SIDES_method}
 \title{SIDES algorithm}
 \description{
-\code{SIDES} apply Subgroup Identification based on Differential Effect Search algorithm on a data set for binary, continuous or survival outcome.
+\code{SIDES} apply Subgroup Identification based on Differential Effect Search algorithm on a data set for binary, continuous, survival or count outcome.
 }
 \usage{
 SIDES_method(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, 
-gamma=NA, H=3, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, num_crit, step=0.5, 
-nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, M_per_covar=FALSE, 
-upper_best=TRUE, selec=FALSE, seed=42)
+gamma=rep(1,3), H=1, pct_rand=0.5, prop_gpe=c(1), alloc_high_prob=TRUE, num_crit=1, 
+step=0.5, nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, 
+M_per_covar=FALSE, upper_best=TRUE, selec=FALSE, seed=42)
 }
 \arguments{                
   \item{all_set}{Data frame representing the global data set. The first column must be the outcome (if the outcome is survival, this column should contain a data frame with the time-to-event in the first column and the indicator status in the second column), the second column must be the treatment variable, and other columns are for covariates.}
   \item{type_var}{A vector of length the number of covariates giving for each of them their type. Must be either "continuous", "ordinal" or "nominal".}
-  \item{type_outcome}{Type of outcome. Are implementing "continuous", "binary", and "survival".}
+  \item{type_outcome}{Type of outcome. Are implementing "continuous", "binary", "survival" and "count".}
   \item{level_control}{Value representing the control in the data set.}
   \item{D}{Minimum desired difference to be demonstrated between the treatment and the control.}
   \item{L}{Maximum number of covariates used to define a subgroup (= depth of the tree). The default value is set at 3.}
   \item{S}{Minimum subgroup size desired. (Subgroups that do not meet this requirement will be excluded).}
   \item{M}{Maximum number of best promising subgroups selected at each step of the algorithm. The default value is set at 5.}
-  \item{gamma}{Vector of length \code{L} representing the relative improvement parameter. Each element must be between 0 and 1. Smaller values indicate more selective procedure. If any improvment is desired, it is recommended to set all elements to 1.}
-  \item{H}{Number of data sets the global data set is split into. There will be 1 training data set and H-1 validation sets. The default value is set at 2.}
+  \item{gamma}{Vector of length \code{L} representing the relative improvement parameter. Each element must be between 0 and 1. Smaller values indicate more selective procedure. If any improvment is desired, it is recommended to set all elements to 1. Default values are set at 1.}
+  \item{H}{Number of data sets the global data set is split into. There will be 1 training data set and H-1 validation sets. The default value is set at 1.}
   \item{pct_rand}{Proportion of the global data set that is randomly allocated between training and validation sets. The default value is set at 0.5.}
   \item{prop_gpe}{Vector of size \code{H} containing the proportion of patients for each data sets (training and validation).}
   \item{alloc_high_prob}{Boolean with value TRUE indicating that patients are allocated to the set the minimizing the imbalanced score, or FALSE indicated that patients are randomized into those sets inversely proportional to their imbalanced score.}

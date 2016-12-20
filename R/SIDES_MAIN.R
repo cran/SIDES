@@ -182,8 +182,8 @@ catch_entries2 = function(all_set, type_var, type_outcome, level_control, D, L, 
 
 
 #### SIDES algorithm
-SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, gamma=NA, H=3, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, 
-                 num_crit, step=0.5, nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, M_per_covar=FALSE, 
+SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, gamma=rep(1,3), H=1, pct_rand=0.5, prop_gpe=c(1), alloc_high_prob=TRUE, 
+                 num_crit=1, step=0.5, nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, M_per_covar=FALSE, 
                  upper_best=TRUE, selec=FALSE, seed=42){  
                  
     catch = catch_entries1(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
@@ -300,9 +300,9 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
 
 
 #### Simulations on SIDES
-simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, num_crit=1, gamma=NA, 
+simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, num_crit=1, gamma=rep(1,3), 
                             alpha, nsim=500, ord.bin=10, nrep=100, seed=42, 
-                            H=2, pct_rand=0.5, prop_gpe, alloc_high_prob=TRUE, 
+                            H=1, pct_rand=0.5, prop_gpe=c(1), alloc_high_prob=TRUE, 
                             step=0.5, nb_sub_cross=5, nsim_cv=500,
                             M_per_covar=FALSE, upper_best=TRUE, nb_cores=NA, ideal=NA){
     catch = catch_entries2(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 

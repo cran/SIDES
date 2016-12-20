@@ -56,13 +56,18 @@ comb_child = function(covariate, type, ord.bin=NA) {
         temp = ord.cut(covariate,ord.bin)
         levels = temp$cut
         nb_levels = temp$g+1
-        groups = vector("list", nb_levels-1)
-        for(i in 1:(nb_levels-1)) {
-            group1 = paste(levels[i],"-",sep="")
-            group2 = paste(levels[i],"+",sep="")
-            groups[[i]] = list(group1, group2)
+        if(nb_levels>1){
+            groups = vector("list", nb_levels-1)
+            for(i in 1:(nb_levels-1)) {
+                group1 = paste(levels[i],"-",sep="")
+                group2 = paste(levels[i],"+",sep="")
+                groups[[i]] = list(group1, group2)
+            }
+            return(groups)
         }
-        return(groups)
+        else{
+            return(NA)
+        }
     }
 }
 
