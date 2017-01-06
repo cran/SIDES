@@ -240,6 +240,7 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
         if(nb_candidates > 1){
             to_comp = combn(1:nb_candidates,2)
             candidates_temp = candidates
+            pval_cand_temp = res_candidates[[3]]
             ind_rem = c()
             for(icol in 1:ncol(to_comp)){
                 if(identical_subgroups(candidates[[to_comp[1,icol]]], candidates[[to_comp[2,icol]]])==TRUE){
@@ -252,6 +253,7 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
             }
             candidates = candidates_temp
             nb_candidates = length(candidates)
+            pval_cand = pval_cand_temp[-ind_rem]
         }
         # Validation on other sets
         if(H > 1){
@@ -281,7 +283,7 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
                     res = list("candidates"=list(list(),c()), "confirmed"=list(confirmed,pval_confirmed))
                 }
                 else{
-                    res = list("candidates"=list(candidates,res_candidates[[3]]),"confirmed"=list(confirmed,pval_confirmed))
+                    res = list("candidates"=list(candidates,pval_cand),"confirmed"=list(confirmed,pval_confirmed))
                 }
             }
             else{
@@ -290,7 +292,7 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
             }
         }
         else{
-            res = list("candidates"=list(candidates,res_candidates[[3]]),"confirmed"=list(list(),c()))
+            res = list("candidates"=list(candidates,pval_cand),"confirmed"=list(list(),c()))
         }  
     }
     res = c(res,"base"=list(all_set),"training"=list(training_set))
