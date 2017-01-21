@@ -1,8 +1,8 @@
 Package: SIDES
 Type: Package
 Title: Subgroup Identification Based on Differential Effect Search
-Version: 1.9
-Date: 2017-01-06
+Version: 1.10
+Date: 2017-01-20
 Author: Marie-Karelle Riviere
 Maintainer: Marie-Karelle Riviere <eldamjh@gmail.com>
 Copyright: All files are copyright Sanofi Aventis
@@ -13,7 +13,7 @@ Imports: memoise (>= 1.0.0), nnet (>= 7.3-12), multicool (>= 0.1-9),
         1.4.3), MASS
 Depends: R (>= 3.1.2)
 LinkingTo:
-Packaged: 2017-01-06 11:29:15 UTC; I0273717
+Packaged: 2017-01-20 11:32:08 UTC; I0273717
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2017-01-06 16:37:52
+Date/Publication: 2017-01-21 01:15:36

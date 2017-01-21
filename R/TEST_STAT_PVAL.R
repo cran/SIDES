@@ -111,6 +111,11 @@ analyse = function(set_groupe, type_outcome, level_control, D=0, alpha, upper_be
         zeff = -zeff
         pval_eff = 1-pval_eff
     }
+    if(is.na(pval_eff)){
+        zeff = 0
+        pval_eff = 1
+        eff_met = FALSE
+    }
     return(c(zeff,pval_eff,eff_met))
 }
 

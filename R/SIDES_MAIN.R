@@ -74,15 +74,15 @@ catch_entries_commun = function(all_set, type_var, type_outcome, level_control, 
         nsim = as.integer(nsim)
         print(paste("The number of permutations for resampling-based methods to adjust pvalues (nsim) was transformed into integer: nsim=", nsim, sep=""))
     }
-    if(nsim < 1){
-        stop("The number of permutations for resampling-based methods to adjust pvalues (nsim) must be superior or equal to 1.")
+    if(nsim < 0){
+        stop("The number of permutations for resampling-based methods to adjust pvalues (nsim) must be superior or equal to 0.")
     }
     if(!is.na(gamma) && as.integer(nsim_cv) != nsim_cv){
         nsim_cv = as.integer(nsim_cv)
         print(paste("The number of permutations for resampling-based methods to adjust pvalues in the cross-validation part (nsim_cv) was transformed into integer: nsim_cv=", nsim_cv, sep=""))
     }
-    if(!is.na(gamma) && nsim_cv < 1){
-        stop("The number of permutations for resampling-based methods to adjust pvalues in the cross-validation part (nsim_cv) must be superior or equal to 1.")
+    if(!is.na(gamma) && nsim_cv < 0){
+        stop("The number of permutations for resampling-based methods to adjust pvalues in the cross-validation part (nsim_cv) must be superior or equal to 0.")
     }
     if(as.integer(ord.bin) != ord.bin){
         ord.bin = as.integer(ord.bin)
@@ -253,7 +253,15 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
             }
             candidates = candidates_temp
             nb_candidates = length(candidates)
-            pval_cand = pval_cand_temp[-ind_rem]
+            if(length(ind_rem)>0){
+                pval_cand = pval_cand_temp[-ind_rem]
+            }
+            else{
+                pval_cand = pval_cand_temp
+            }
+        }
+        else{
+          pval_cand = res_candidates[[3]]
         }
         # Validation on other sets
         if(H > 1){
