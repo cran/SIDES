@@ -69,9 +69,17 @@ type_outcome="continuous", level_control=0, D=0, L=1, S=50, M=1, num_crit=1,
 gamma=c(1), alpha=0.05, nsim=1, ord.bin=10, nrep=1, seed=42,
 H=2, pct_rand=1.0, prop_gpe=c(0.7,0.3), upper_best=TRUE, nb_cores=1)
 
-# REAL EXAMPLE TO UNCOMMENT
-#s1 = simulation_SIDES(all_set=data, type_var=rep("ordinal",10), 
-#type_outcome="continuous", level_control=0, D=0, L=3, S=30, M=5, num_crit=1, 
-#gamma=c(1,1,1), alpha=0.10, nsim=1000, ord.bin=10, nrep=1000, seed=42,
-#H=2, pct_rand=0.5, prop_gpe=c(0.7,0.3), upper_best=TRUE)
+# REAL EXAMPLES TO UNCOMMENT
+#s1 = simulation_SIDES(all_set=data, 
+#type_var=c(rep("continuous",5),rep("ordinal",5)), type_outcome="continuous",
+#level_control=0, D=0, L=3, S=30, M=5, num_crit=1, gamma=c(1,1,1), alpha=0.10,
+#nsim=1000, ord.bin=10, nrep=1000, seed=42, H=1, upper_best=TRUE)
+#s1
+
+#s1 = simulation_SIDES(all_set=data, 
+#type_var=c(rep("continuous",5),rep("ordinal",5)), type_outcome="continuous",
+#level_control=0, D=0, L=3, S=30, M=5, num_crit=1, gamma=c(1,1,1), alpha=0.10,
+#nsim=1000, ord.bin=10, nrep=1000, seed=42, H=2, pct_rand=0.5,
+#prop_gpe=c(0.7,0.3), upper_best=TRUE)
+#s1
 }
