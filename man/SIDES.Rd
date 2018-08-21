@@ -1,15 +1,15 @@
 \name{SIDES}
-\alias{SIDES_method}
-\alias{print.SIDES_method}
+\alias{SIDES}
+\alias{print.SIDES}
 \title{SIDES algorithm}
 \description{
 \code{SIDES} apply Subgroup Identification based on Differential Effect Search algorithm on a data set for binary, continuous, survival or count outcome.
 }
 \usage{
-SIDES_method(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, 
+SIDES(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, 
 gamma=rep(1,3), H=1, pct_rand=0.5, prop_gpe=c(1), alloc_high_prob=TRUE, num_crit=1, 
 step=0.5, nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, 
-M_per_covar=FALSE, upper_best=TRUE, selec=FALSE, seed=42)
+M_per_covar=FALSE, upper_best=TRUE, selec=FALSE, seed=42, modified=TRUE)
 }
 \arguments{                
   \item{all_set}{Data frame representing the global data set. The first column must be the outcome (if the outcome is survival, this column should contain a data frame with the time-to-event in the first column and the indicator status in the second column), the second column must be the treatment variable, and other columns are for covariates.}
@@ -36,6 +36,7 @@ M_per_covar=FALSE, upper_best=TRUE, selec=FALSE, seed=42)
   \item{upper_best}{Boolean indicating if greater values of the outcome mean better responses.}
   \item{selec}{Boolean indicating if in addition of the validated subgroups, the output should also contain subgroups that were selected (before validation).}
   \item{seed}{Seed. The default value is set at 42.}
+  \item{modified}{Boolean indicating if modified or original Sidak correction is used for over-representation of covariates with more than 2 levels. Default value is TRUE.}
 }
 \value{
 An object of class "SIDES" is returned, consisting of: 
@@ -60,12 +61,12 @@ data=cbind(y,trt,x)
 head(data)
 
 # REAL EXAMPLES TO UNCOMMENT
-#s1 = SIDES_method(all_set=data, 
+#s1 = SIDES(all_set=data, 
 #type_var=c(rep("continuous",5),rep("ordinal",5)), type_outcome="continuous",
 #level_control=0, D=0, L=3, S=30, M=5, gamma=c(1,1,1), H=1, num_crit=1, 
 #alpha=0.10, nsim=1000, ord.bin=10, upper_best=TRUE, seed=42)
 
-#s1 = SIDES_method(all_set=data, 
+#s1 = SIDES(all_set=data, 
 #type_var=c(rep("continuous",5),rep("ordinal",5)), type_outcome="continuous",
 #level_control=0, D=0, L=3, S=30, M=5, gamma=c(1,1,1), H=2, pct_rand=0.5,
 #prop_gpe=c(0.7,0.3), num_crit=1, alpha=0.10, nsim=1000, ord.bin=10, 

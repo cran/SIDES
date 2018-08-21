@@ -182,9 +182,9 @@ catch_entries2 = function(all_set, type_var, type_outcome, level_control, D, L, 
 
 
 #### SIDES algorithm
-SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, gamma=rep(1,3), H=1, pct_rand=0.5, prop_gpe=c(1), alloc_high_prob=TRUE, 
+SIDES = function(all_set, type_var, type_outcome, level_control, D=0, L=3, S, M=5, gamma=rep(1,3), H=1, pct_rand=0.5, prop_gpe=c(1), alloc_high_prob=TRUE, 
                  num_crit=1, step=0.5, nb_sub_cross=5, alpha, nsim=500, nsim_cv=500, ord.bin=10, M_per_covar=FALSE, 
-                 upper_best=TRUE, selec=FALSE, seed=42){  
+                 upper_best=TRUE, selec=FALSE, seed=42, modified=TRUE){  
                  
     catch = catch_entries1(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, selec)    
@@ -228,7 +228,7 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
         }
     }
     # Candidates subgroups
-    res_candidates = subgroup_identification_candidates(training_set, type_var, type_outcome, level_control, D, L, S, num_crit, M, gamma, alpha, nsim, ord.bin, upper_best, M_per_covar, seed)
+    res_candidates = subgroup_identification_candidates(training_set, type_var, type_outcome, level_control, D, L, S, num_crit, M, gamma, alpha, nsim, ord.bin, upper_best, M_per_covar, seed, modified)
     candidates = res_candidates[[1]]
     nb_candidates = length(candidates)  
     if(nb_candidates==0){
@@ -304,7 +304,7 @@ SIDES_method = function(all_set, type_var, type_outcome, level_control, D=0, L=3
         }  
     }
     res = c(res,"base"=list(all_set),"training"=list(training_set))
-    class(res) = "SIDES_method"
+    class(res) = "SIDES"
     return(res)
 }
 
@@ -314,7 +314,7 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
                             alpha, nsim=500, ord.bin=10, nrep=100, seed=42, 
                             H=1, pct_rand=0.5, prop_gpe=c(1), alloc_high_prob=TRUE, 
                             step=0.5, nb_sub_cross=5, nsim_cv=500,
-                            M_per_covar=FALSE, upper_best=TRUE, nb_cores=NA, ideal=NA){
+                            M_per_covar=FALSE, upper_best=TRUE, nb_cores=NA, ideal=NA, modified=TRUE){
     catch = catch_entries2(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
                  num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, seed, nrep)
   
@@ -372,8 +372,8 @@ simulation_SIDES = function(all_set, type_var, type_outcome, level_control, D=0,
       res_simu = foreach(r=1:nrep, .export=ls(globalenv()), .inorder=FALSE) %dopar% {
           set.seed(seed+r)
 print(r)
-          res_r = SIDES_method(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
-                   num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r)    
+          res_r = SIDES(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                   num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r, modified)    
           return(res_r)
       }
     }
@@ -382,8 +382,8 @@ print(r)
       for(r in 1:nrep){
         set.seed(seed+r)
 print(r)
-        res_r = SIDES_method(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
-                             num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r)    
+        res_r = SIDES(all_set, type_var, type_outcome, level_control, D, L, S, M, gamma, H, pct_rand, prop_gpe, alloc_high_prob, 
+                             num_crit, step, nb_sub_cross, alpha, nsim, nsim_cv, ord.bin, M_per_covar, upper_best, selec=FALSE, seed+r, modified)    
         res_simu = c(res_simu, list(res_r))
       }
     }
@@ -626,7 +626,7 @@ print_gpe = function(subgroup, pval=NA, x, pct=NA){
 #print_gpe(gg2,0.00058)
     
 
-print.SIDES_method = function(x, ...){
+print.SIDES = function(x, ...){
     nb_cand = length(x$candidates[[2]])
     nb_conf = length(x$confirmed[[2]])
     if(nb_cand>0){

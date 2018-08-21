@@ -8,11 +8,7 @@ import(doParallel)
 import(foreach)
 import(parallel)
 import(MASS)
-export(SIDES_method)
-S3method(print, SIDES_method)
+export(SIDES)
+S3method(print, SIDES)
 export(simulation_SIDES)
-S3method(print, simulation_SIDES)
-
-
-
-
+S3method(print, simulation_SIDES)

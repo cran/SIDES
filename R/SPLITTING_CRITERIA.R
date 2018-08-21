@@ -32,7 +32,7 @@ splitting_crit = function(z1,z2,num_crit){
 
 #### Function that order the pair of child (the splits) from the best to the worst 
 #### in terms of splitting criterion, and select the best M pairs
-best_child = function(vec_z1, vec_z2, num_crit, M, vec_levels, vec_type){
+best_child = function(vec_z1, vec_z2, num_crit, M, vec_levels, vec_type, modified){
     nb_splits = length(vec_z1)
     if(nb_splits > 0){
         if(num_crit == 1 || num_crit == 2){
@@ -40,7 +40,7 @@ best_child = function(vec_z1, vec_z2, num_crit, M, vec_levels, vec_type){
             for(i in 1:nb_splits){
                 split_crit[i] = splitting_crit(vec_z1[i],vec_z2[i],num_crit)
             }
-            adj_split_crit = adjusted_pvalue(split_crit, vec_levels, vec_type, num_crit)
+            adj_split_crit = adjusted_pvalue(split_crit, vec_levels, vec_type, num_crit, modified)
         }
         else if(num_crit == 3){
             split_crit = matrix(NA, nrow=nb_splits, ncol=2)
@@ -48,8 +48,8 @@ best_child = function(vec_z1, vec_z2, num_crit, M, vec_levels, vec_type){
                 split_crit[i,1] = splitting_crit(vec_z1[i],vec_z2[i],1)
                 split_crit[i,2] = splitting_crit(vec_z1[i],vec_z2[i],2)
             }
-            adj_split_crit1 = adjusted_pvalue(split_crit[,1], vec_levels, vec_type, 1) 
-            adj_split_crit2 = adjusted_pvalue(split_crit[,2], vec_levels, vec_type, 2) 
+            adj_split_crit1 = adjusted_pvalue(split_crit[,1], vec_levels, vec_type, 1, modified) 
+            adj_split_crit2 = adjusted_pvalue(split_crit[,2], vec_levels, vec_type, 2, modified) 
             adj_split_crit = pmax(adj_split_crit1, adj_split_crit2)
         }
         ind_best = order(adj_split_crit)

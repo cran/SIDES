@@ -154,13 +154,32 @@ effective_nb_splits = function(nb_levels, type_var, num_crit){
 
 effective_nb_splits_memo = memoise(effective_nb_splits)
 
+
+#### Function to calculate the number of split G
+number_splits = function(nb_levels, type_var){
+  G = NA
+  if(type_var=="nominal"){
+    G = 2^(nb_levels-1)-1
+  }
+  else if(type_var=="ordinal" || type_var=="continuous"){
+    G = nb_levels-1
+  }
+  return(G)
+}
+
+
 #### Function to calculate the adjusted p_value
-adjusted_pvalue = function(vec_pvalues, vec_levels, vec_type, num_crit){
+adjusted_pvalue = function(vec_pvalues, vec_levels, vec_type, num_crit, modified){
     nb_pval = length(vec_pvalues)
     adj_pval = rep(NA, nb_pval)
     for(i in 1:nb_pval){
         if(vec_levels[i] >= 3){
-            adj_pval[i] = 1-(1-vec_pvalues[i])^(effective_nb_splits_memo(vec_levels[i],vec_type[i],num_crit))
+            if(modified==TRUE){
+                adj_pval[i] = 1-(1-vec_pvalues[i])^(effective_nb_splits_memo(vec_levels[i],vec_type[i],num_crit))
+            }
+            else{
+                adj_pval[i] = 1-(1-vec_pvalues[i])^(number_splits(vec_levels[i],vec_type[i]))
+            }
         }
         else{
             adj_pval[i] = vec_pvalues[i]

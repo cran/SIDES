@@ -4,7 +4,7 @@
 
 #### Function that identify promisings subgroups (select the best split per covariate with a maximum of M splits)
 subgroup_identification_promising = function(training_set, type_var, type_outcome, level_control, D=0, alpha, 
-L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){    
+L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE, modified=TRUE){    
     promisings = list()
     pvalues_promisings = c()
     best_pval = +Inf
@@ -81,7 +81,7 @@ L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
                 }
        	    }
             # Select the best split (per covariate) with a maximum of M
-            best_splits = best_child(vec_z1, vec_z2, num_crit, 1, vec_levels, vec_type)
+            best_splits = best_child(vec_z1, vec_z2, num_crit, 1, vec_levels, vec_type, modified)
             ind_best_splits = best_splits[[1]]
             splitting_best_splits = best_splits[[2]]
             if(length(ind_best_splits) > 0){
@@ -161,7 +161,7 @@ L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
 
 #### Function that identify promisings subgroups (select the M best split)
 subgroup_identification_promising2 = function(training_set, type_var, type_outcome, level_control, D=0, alpha, 
-L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
+L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE, modified=TRUE){
     promisings = list()
     pvalues_promisings = c()
     best_pval = +Inf
@@ -242,7 +242,7 @@ L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
        	    }
         }	    
         # Caculate splitting criteria with correction for all childs and select the best M childs
-        best_splits = best_child(vec_z1, vec_z2, num_crit, M, vec_levels, vec_type)
+        best_splits = best_child(vec_z1, vec_z2, num_crit, M, vec_levels, vec_type, modified)
         ind_best_splits = best_splits[[1]]
         splitting_best_splits = best_splits[[2]]
         if(length(ind_best_splits) > 0){
@@ -304,17 +304,17 @@ L=3, S, num_crit, M=5, gamma, best_pval=FALSE, ord.bin, upper_best=TRUE){
 
 #### Function that identify candidates subgroups
 subgroup_identification_candidates = function(training_set, type_var, type_outcome, level_control, 
-D=0, L=3, S, num_crit, M=5, gamma, alpha, nsim, ord.bin, upper_best=TRUE, M_per_covar=FALSE, seed=42){  
+D=0, L=3, S, num_crit, M=5, gamma, alpha, nsim, ord.bin, upper_best=TRUE, M_per_covar=FALSE, seed=42, modified=TRUE){  
     candidates = list()
     pvalues_candidates = c()
     adj_pvalues_candidates = c()
 
     # Identification of promising subgroups
     if(M_per_covar==TRUE){
-        res_prom = subgroup_identification_promising(training_set, type_var, type_outcome, level_control, D, alpha, L, S, num_crit, M, gamma, FALSE, ord.bin, upper_best)
+        res_prom = subgroup_identification_promising(training_set, type_var, type_outcome, level_control, D, alpha, L, S, num_crit, M, gamma, FALSE, ord.bin, upper_best, modified)
     }
     else{
-        res_prom = subgroup_identification_promising2(training_set, type_var, type_outcome, level_control, D, alpha, L, S, num_crit, M, gamma, FALSE, ord.bin, upper_best)
+        res_prom = subgroup_identification_promising2(training_set, type_var, type_outcome, level_control, D, alpha, L, S, num_crit, M, gamma, FALSE, ord.bin, upper_best, modified)
     }
     promising_subgroups = res_prom[[1]]
     pvalues_promising = res_prom[[2]]
@@ -338,7 +338,7 @@ D=0, L=3, S, num_crit, M=5, gamma, alpha, nsim, ord.bin, upper_best=TRUE, M_per_
 
 
 subgroup_identification_best_cv = function(training_set, type_var, type_outcome, level_control, 
-D=0, L=3, S, num_crit, M=5, gamma, alpha, nsim, ord.bin, upper_best=TRUE, M_per_covar=FALSE, seed=42){
+D=0, L=3, S, num_crit, M=5, gamma, alpha, nsim, ord.bin, upper_best=TRUE, M_per_covar=FALSE, seed=42, modified=TRUE){
     candidates = list()
     pvalues_candidates = c()
     adj_pvalues_candidates = c()
@@ -346,10 +346,10 @@ D=0, L=3, S, num_crit, M=5, gamma, alpha, nsim, ord.bin, upper_best=TRUE, M_per_
 
     # Identification of promising subgroups
     if(M_per_covar==TRUE){
-        res_prom = subgroup_identification_promising(training_set, type_var, type_outcome, level_control, D, alpha, L, S, num_crit, M, gamma, FALSE, ord.bin, upper_best)
+        res_prom = subgroup_identification_promising(training_set, type_var, type_outcome, level_control, D, alpha, L, S, num_crit, M, gamma, FALSE, ord.bin, upper_best, modified)
     }
     else{
-        res_prom = subgroup_identification_promising2(training_set, type_var, type_outcome, level_control, D, alpha, L, S, num_crit, M, gamma, FALSE, ord.bin, upper_best)
+        res_prom = subgroup_identification_promising2(training_set, type_var, type_outcome, level_control, D, alpha, L, S, num_crit, M, gamma, FALSE, ord.bin, upper_best, modified)
     }
     promising_subgroups = res_prom[[1]]
     pvalues_promising = res_prom[[2]]
