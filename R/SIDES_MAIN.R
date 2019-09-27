@@ -7,7 +7,7 @@ catch_entries_commun = function(all_set, type_var, type_outcome, level_control, 
     if(ncol(all_set)<=2){
         stop("Data base (all_set) does not contain any covariate.")
     }
-    if(type_outcome != "binary" && type_outcome != "continuous" && type_outcome != "survival"){
+    if(type_outcome != "binary" && type_outcome != "continuous" && type_outcome != "survival" && type_outcome != "count"){
         stop("Outcome (type_outcome) should be either continuous, binary or survival.")
     }
     if(sum((type_var != "continuous") & (type_var != "ordinal") & (type_var != "nominal")) > 0){

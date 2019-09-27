@@ -12,8 +12,8 @@ Provides function to apply "Subgroup Identification based on Differential Effect
 \tabular{ll}{
 Package: \tab SIDES\cr
 Type: \tab Package\cr
-Version: \tab 1.13\cr
-Date: \tab 2018-08-08\cr
+Version: \tab 1.14\cr
+Date: \tab 2019-09-27\cr
 License: \tab GPL-3\cr
 }
 }
