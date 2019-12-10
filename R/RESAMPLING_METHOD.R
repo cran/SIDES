@@ -13,7 +13,7 @@ M=5, gamma, alpha, ord.bin=10, upper_best=TRUE, M_per_covar=FALSE, seed=42){
     if(nsim > 0 && nb_promising>0){
         nb_pat = nrow(training_set)
         nb_col = ncol(training_set)
-        X = training_set[,3:nb_col]
+        X = as.matrix(training_set[,3:nb_col], ncol=nb_col-3+1, nrow=nb_pat)
         prop_adj_f = numeric(nb_promising)
         for(i in 1:nsim){
             permute = sample(1:nb_pat, nb_pat, replace=FALSE)
