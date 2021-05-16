@@ -54,7 +54,7 @@ Ilya Lipkovich, Alex Dmitrienko, Jonathan Denne and Gregory Enas. Subgroup ident
 \author{Marie-Karelle Riviere-Jourdan \email{eldamjh@gmail.com}}
 \examples{
 n=500
-x=data.frame(matrix(rnorm(n*5,10,5),n,5),matrix(rbinom(n*5,1,0.5),n,5))
+x=data.frame(matrix(rnorm(n*10,10,5),n,10),matrix(rbinom(n*10,1,0.5),n,10))
 colnames(x)=paste("x",c(1:10),sep='')
 rownames(x)=1:n
 trt=rbinom(n,1,0.5)
