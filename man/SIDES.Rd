@@ -48,8 +48,13 @@ Ilya Lipkovich, Alex Dmitrienko, Jonathan Denne and Gregory Enas. Subgroup ident
 }
 \author{Marie-Karelle Riviere-Jourdan \email{eldamjh@gmail.com}}
 \examples{
+# WARNING: the package does not catch wrong entries by the user and could then 
+# return any type of error that would not make sense!
+# Data must be supplied as numerical, even factors / characters must be 
+# transformed into numerical values and type is then provided through "type_var"
+
 n=500
-x=data.frame(matrix(rnorm(n*10,10,5),n,10),matrix(rbinom(n*10,1,0.5),n,10))
+x=data.frame(matrix(rnorm(n*5,10,5),n,5),matrix(rbinom(n*5,1,0.5),n,5))
 colnames(x)=paste("x",c(1:10),sep='')
 rownames(x)=1:n
 trt=rbinom(n,1,0.5)
@@ -59,6 +64,7 @@ I7=(x$x7==0);n7=sum(I7)
 y=trt*(I1*(n-n1)-(1-I1)*n1+I6*(n-n6)-(1-I6)*n6+I7*(n-n7)-(1-I7)*n7)/n+rnorm(n)
 data=cbind(y,trt,x)
 head(data)
+
 
 # REAL EXAMPLES TO UNCOMMENT
 #s1 = SIDES(all_set=data, 

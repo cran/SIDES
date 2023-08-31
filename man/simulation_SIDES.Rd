@@ -53,6 +53,11 @@ Ilya Lipkovich, Alex Dmitrienko, Jonathan Denne and Gregory Enas. Subgroup ident
 }
 \author{Marie-Karelle Riviere-Jourdan \email{eldamjh@gmail.com}}
 \examples{
+# WARNING: the package does not catch wrong entries by the user and could then 
+# return any type of error that would not make sense!
+# Data must be supplied as numerical, even factors / characters must be 
+# transformed into numerical values and type is then provided through "type_var"
+
 n=500
 x=data.frame(matrix(rnorm(n*10,10,5),n,10),matrix(rbinom(n*10,1,0.5),n,10))
 colnames(x)=paste("x",c(1:10),sep='')
